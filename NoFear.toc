@@ -1,0 +1,8 @@
+## Interface: 11200
+## Title: NoFear
+## Author: Dispatch
+## Version: 1.0.0.0
+## Notes: Fear Ward tracker
+## SavedVariables: NF_DATA, NF_PRESETS
+ChatThrottleLib\ChatThrottleLib.lua
+NoFear.xml
