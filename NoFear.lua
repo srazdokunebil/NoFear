@@ -1,13 +1,15 @@
 local nf_VERSION = "1.0.0.0" --don't use letters or numbers > 10
 local me = UnitName('player')
 
-local NF = CreateFrame("Frame")
-local nf_Initialized = false;
+nf = CreateFrame("Frame", nil, UIParent)
+nf.Initialized = false;
 
-local DPx_Ready = false;
-local DPx_Countdown = 0;
+nf.DPx_Ready = false;
+nf.DPx_Countdown = 0;
+nf.AmDPx = false;
+nf.AmMTx = false;
 
-function nf_Print(a)
+function nf.Print(a)
     if a == nil then
         DEFAULT_CHAT_FRAME:AddMessage('|cff69ccf0[NF]|cff0070de:' .. time() .. '|cffffffff attempt to print a nil value.')
         return false
@@ -15,98 +17,121 @@ function nf_Print(a)
     DEFAULT_CHAT_FRAME:AddMessage("|cff69ccf0[NF] |cffffffff" .. a)
 end
 
-function nf_Error(a)
+function nf.Error(a)
     DEFAULT_CHAT_FRAME:AddMessage('|cff69ccf0[NF]|cff0070de:' .. time() .. '|cffffffff[' .. a .. ']')
 end
 
-function nf_Debug(a)
+function nf.Debug(a)
     --    if not TWLC_DEBUG then return end
     if me == 'Kzktst' or me == 'Xerrtwo' then
-        nf_Print('|cff0070de[TWADEBUG:' .. time() .. ']|cffffffff[' .. a .. ']')
+        nf.Print('|cff0070de[TWADEBUG:' .. time() .. ']|cffffffff[' .. a .. ']')
     end
 end
 
-function nf_Initialize()
+function nf.Initialize()
 
     --VRotaConfig_Text_Version:SetText("NoFear v" .. nf_VERSION)
 
     local class = UnitClass('player');
     local race = UnitRace('player');
     if class == "Priest" and race == "Dwarf" then
-        nf_Print('you are a dorf preest')
+        nf.Print('you are a dorf preest')
+        nf.AmDPx = true;
         DPxFrame:Show()
         MTxFrame:Hide()
     else
-        nf_Print('you are NOT a dorf preest')
+        nf.Print('you are NOT a dorf preest')
+        nf.AmDPx = false;
         DPxFrame:Hide()
         MTxFrame:Show()
     end
 
-    nf_Initialized = true;
+    nf.Initialized = true;
 end
 
 --[ OnLoad ]--
-function nf_OnLoad()
-    nf_RegisterEvents()
-    nf_UnpauseEvents()
+function nf.OnLoad()
+    nf.RegisterEvents()
+    nf.UnpauseEvents()
 end
 
 --[ OnUpdate ]--
-function nf_OnUpdate(arg1)
+function nf.OnUpdate(arg1)
 
 end
 
 --[ OnEvent ]--
-function nf_OnEvent(event, arg1)
+function nf.OnEvent(event, arg1, arg2)
 
     if false then
         --
     elseif event == "PARTY_MEMBERS_CHANGED" then
         --vr.api.GroupSync();
 
-    elseif event == "CHAT_MSG_ADDON" and arg1 == "MTx" then
-        NF.handleMTxSync(arg1, arg2, arg3, arg4)
+    --elseif event == "CHAT_MSG_ADDON" then
+    --    nf.Print(event .. ":" .. arg1 .. ":" .. arg2)
+    --
+    elseif event == "CHAT_MSG_ADDON" and arg1 == "NF_MTx" then
+        nf.handleMTxSync(arg1, arg2, arg3, arg4)
 
-    elseif event == "CHAT_MSG_ADDON" and arg1 == "DPx" then
-        NF.handleDPxSync(arg1, arg2, arg3, arg4)
+    elseif event == "CHAT_MSG_ADDON" and arg1 == "NF_DPx" then
+        nf.Print('i see some fucking thing')
+        nf.handleDPxSync(arg1, arg2, arg3, arg4)
 
     elseif event == "PLAYER_AURAS_CHANGED" then
-        -- Check to see if mounted
-        if UnitIsMounted("player") then
-            VRotaMount = true
-        else
-            VRotaMount = false
-        end
+        ---- Check to see if mounted
+        --if UnitIsMounted("player") then
+        --    VRotaMount = true
+        --else
+        --    VRotaMount = false
+        --end
 
     elseif event == "CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS" then
-        if arg1 == CHAT_GAINED_FLURRY_FURY then
-            FuryFlurryStart = GetTime()
-        end
+        --if arg1 == CHAT_GAINED_FLURRY_FURY then
+        --    FuryFlurryStart = GetTime()
+        --end
 
     elseif event == "PLAYER_REGEN_DISABLED" then
-        nf_Combat = true
+        nf.Combat = true
 
     elseif (event == "VARIABLES_LOADED") then
-        if not nf_Initialized then
-            nf_Initialize(false);
+        if not nf.Initialized then
+            nf.Initialize(false);
         end
     end
 
 end
 
-
-
-
----[ DPx functions ]-----------------------------------------------------------
-function nf_DPxPing()
-    DPx_Countdown = DPx_Countdown + 1
-    ChatThrottleLib:SendAddonMessage("ALERT", "NF", DPx_Countdown, "RAID") -- transmit roster
+function nf.ToggleUI()
+    if nf.AmDPx then
+        if DPxFrame:IsShown() then
+            DPxFrame:Hide();
+        else
+            DPxFrame:Show();
+        end
+    else
+        if MTxFrame:IsShown() then
+            MTxFrame:Hide();
+        else
+            MTxFrame:Show();
+        end
+    end
 end
 
 
+---[ nf_DPxPing ]-----------------------------------------------------------
+function nf.DPxPing()
+    nf.DPx_Countdown = nf.DPx_Countdown + 1
+    ChatThrottleLib:SendAddonMessage("ALERT", "NF_DPx", nf.DPx_Countdown, "RAID") -- transmit roster
+end
+
+function nf.handleDPxSync(arg1, arg2, arg3, arg4)
+
+    nf.Print(arg1 .. ":" .. arg2)
+end
 
 
----[ MTx functions ]-----------------------------------------------------------
-function nf_MTxPing()
+---[ nf_MTxPing ]-----------------------------------------------------------
+function nf.MTxPing()
 
 end

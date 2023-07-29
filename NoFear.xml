@@ -16,14 +16,14 @@
     <Frame name="NFFrame" hidden="false">
         <Scripts>
             <OnLoad>
-                nf_OnLoad();
-                nf_XML_FileBuildNumber = 687
+                nf.OnLoad();
+                --nf_XML_FileBuildNumber = 687
             </OnLoad>
             <OnUpdate>
-                nf_OnUpdate(arg1);
+                nf.OnUpdate(arg1);
             </OnUpdate>
             <OnEvent>
-                nf_OnEvent(event, arg1, arg2, arg3);
+                nf.OnEvent(event, arg1, arg2, arg3);
             </OnEvent>
         </Scripts>
     </Frame>
@@ -44,9 +44,9 @@
             <OnLoad>
                 this:RegisterForDrag("LeftButton");
                 --this:SetBackdropBorderColor(0.9,0.9,0.9,0.8)
-                nf_OnLoad();
+                nf.OnLoad();
             </OnLoad>
-            <OnEvent>nf_OnEvent()</OnEvent>
+            <OnEvent>nf.OnEvent()</OnEvent>
             <OnDragStart>
                 this:StartMoving();
             </OnDragStart>
@@ -91,7 +91,7 @@
                 </Anchors>
                 <Scripts>
                     <OnClick>
-                        nf_DPxPing();
+                        nf.DPxPing();
                     </OnClick>
                 </Scripts>
             </Button>
@@ -132,9 +132,9 @@
             <OnLoad>
                 this:RegisterForDrag("LeftButton");
                 --this:SetBackdropBorderColor(0.9,0.9,0.9,0.8)
-                nf_OnLoad();
+                nf.OnLoad();
             </OnLoad>
-            <OnEvent>nf_OnEvent()</OnEvent>
+            <OnEvent>nf.OnEvent()</OnEvent>
             <OnDragStart>
                 this:StartMoving();
             </OnDragStart>
@@ -179,7 +179,7 @@
                 </Anchors>
                 <Scripts>
                     <OnClick>
-                        nf_MTxPing();
+                        nf.MTxPing();
                     </OnClick>
                 </Scripts>
             </Button>
@@ -216,7 +216,7 @@
 
 
 
-    <Button name="nf_Minimap" movable="true" parent="UIParent" enableMouse="true" toplevel="true"
+    <Button name="NF_Minimap" movable="true" parent="UIParent" enableMouse="true" toplevel="true"
             frameStrata="LOW">
         <Size x="33" y="33"/>
         <Anchors>
@@ -271,9 +271,7 @@
             </OnLeave>
             <OnMouseUp>
                 if arg1 == "LeftButton" then
-                nf_ToggleConfigurationPanel();
-                --                            else
-                --                                ShowTWAMinimapDropdown()
+                    nf.ToggleUI();
                 end
             </OnMouseUp>
         </Scripts>

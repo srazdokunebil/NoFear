@@ -88,20 +88,20 @@ nf_EventCollection = {
 
 }
 
-function nf_UnpauseEvents()
+function nf.UnpauseEvents()
     local coreFrame = getglobal("NFFrame");
     for i, val in ipairs(nf_EventCollection.nf_EventsSwitched) do
         coreFrame:RegisterEvent(val);
     end
 
 end
-function nf_PauseEvents()
+function nf.PauseEvents()
     local coreFrame = getglobal("NFFrame");
     for i, val in ipairs(nf_EventCollection.nf_EventsSwitched) do
         coreFrame:UnregisterEvent(val);
     end
 end
-function nf_RegisterEvents()
+function nf.RegisterEvents()
     for i, val in ipairs(nf_EventCollection.nf_EventsMandatory) do
         this:RegisterEvent(val);
     end
