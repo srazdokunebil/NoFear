@@ -13,7 +13,7 @@
 <!--    <Include file="VRLib.lua"/>-->
     <Include file="Events.lua"/>
 
-    <Frame name="nfFrame" hidden="false">
+    <Frame name="NFFrame" hidden="false">
         <Scripts>
             <OnLoad>
                 nf_OnLoad();
@@ -27,6 +27,192 @@
             </OnEvent>
         </Scripts>
     </Frame>
+
+
+
+
+    <!-- DPx Frame -->
+    <Frame name="DPxFrame" frameStrata="DIALOG" toplevel="true" parent="UIParent" hidden="true" movable="true"
+           enableMouse="true">
+        <Size>
+            <AbsDimension x="100" y="100"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER"/>
+        </Anchors>
+        <Scripts>
+            <OnLoad>
+                this:RegisterForDrag("LeftButton");
+                --this:SetBackdropBorderColor(0.9,0.9,0.9,0.8)
+                nf_OnLoad();
+            </OnLoad>
+            <OnEvent>nf_OnEvent()</OnEvent>
+            <OnDragStart>
+                this:StartMoving();
+            </OnDragStart>
+            <OnDragStop>
+                this:StopMovingOrSizing();
+            </OnDragStop>
+            <OnHide>
+                --VRotaHealingBar:Hide();
+            </OnHide>
+            <OnShow>
+                --VRotaHealingBar:Show();
+            </OnShow>
+        </Scripts>
+        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+                  tile="true">
+            <TileSize>
+                <AbsValue val="32"/>
+            </TileSize>
+            <EdgeSize>
+                <AbsValue val="32"/>
+            </EdgeSize>
+            <BackgroundInsets>
+                <AbsInset left="5" right="5" top="5" bottom="5"/>
+            </BackgroundInsets>
+        </Backdrop>
+        <Layers>
+
+        </Layers>
+        <Frames>
+
+            <!-- Default Button -->
+            <Button name="DPxFrame_PingButton" inherits="UIPanelButtonTemplate" text="Ping">
+                <Size>
+                    <AbsDimension x="90" y="25"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOP" relativePoint="TOP">
+                        <Offset>
+                            <AbsDimension x="0" y="-70"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        nf_DPxPing();
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <!-- Close Button -->
+            <!-- <Button name="VRotaConfig_CloseButton" inherits="UIPanelButtonTemplate" text="OK">
+                <Size>
+                    <AbsDimension x="90" y="25"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="CENTER" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="60" y="35"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        VRota_ToggleConfigurationPanel();
+                    </OnClick>
+                </Scripts>
+            </Button> -->
+
+        </Frames>
+    </Frame>
+
+
+    <!-- MTx Frame -->
+    <Frame name="MTxFrame" frameStrata="DIALOG" toplevel="true" parent="UIParent" hidden="true" movable="true"
+           enableMouse="true">
+        <Size>
+            <AbsDimension x="100" y="100"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER"/>
+        </Anchors>
+        <Scripts>
+            <OnLoad>
+                this:RegisterForDrag("LeftButton");
+                --this:SetBackdropBorderColor(0.9,0.9,0.9,0.8)
+                nf_OnLoad();
+            </OnLoad>
+            <OnEvent>nf_OnEvent()</OnEvent>
+            <OnDragStart>
+                this:StartMoving();
+            </OnDragStart>
+            <OnDragStop>
+                this:StopMovingOrSizing();
+            </OnDragStop>
+            <OnHide>
+                --VRotaHealingBar:Hide();
+            </OnHide>
+            <OnShow>
+                --VRotaHealingBar:Show();
+            </OnShow>
+        </Scripts>
+        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+                  tile="true">
+            <TileSize>
+                <AbsValue val="32"/>
+            </TileSize>
+            <EdgeSize>
+                <AbsValue val="32"/>
+            </EdgeSize>
+            <BackgroundInsets>
+                <AbsInset left="5" right="5" top="5" bottom="5"/>
+            </BackgroundInsets>
+        </Backdrop>
+        <Layers>
+
+        </Layers>
+        <Frames>
+
+            <!-- Default Button -->
+            <Button name="MTxFrame_PingButton" inherits="UIPanelButtonTemplate" text="Ping">
+                <Size>
+                    <AbsDimension x="90" y="25"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOP" relativePoint="TOP">
+                        <Offset>
+                            <AbsDimension x="0" y="-70"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        nf_MTxPing();
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <!-- Close Button -->
+            <!-- <Button name="VRotaConfig_CloseButton" inherits="UIPanelButtonTemplate" text="OK">
+                <Size>
+                    <AbsDimension x="90" y="25"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="CENTER" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="60" y="35"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        VRota_ToggleConfigurationPanel();
+                    </OnClick>
+                </Scripts>
+            </Button> -->
+
+        </Frames>
+    </Frame>
+
+
+
+
+
+
+
+
 
 
 

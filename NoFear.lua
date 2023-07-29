@@ -4,16 +4,19 @@ local me = UnitName('player')
 local NF = CreateFrame("Frame")
 local nf_Initialized = false;
 
+local DPx_Ready = false;
+local DPx_Countdown = 0;
+
 function nf_Print(a)
     if a == nil then
-        DEFAULT_CHAT_FRAME:AddMessage('|cff69ccf0[TWA]|cff0070de:' .. time() .. '|cffffffff attempt to print a nil value.')
+        DEFAULT_CHAT_FRAME:AddMessage('|cff69ccf0[NF]|cff0070de:' .. time() .. '|cffffffff attempt to print a nil value.')
         return false
     end
-    DEFAULT_CHAT_FRAME:AddMessage("|cff69ccf0[TWA] |cffffffff" .. a)
+    DEFAULT_CHAT_FRAME:AddMessage("|cff69ccf0[NF] |cffffffff" .. a)
 end
 
 function nf_Error(a)
-    DEFAULT_CHAT_FRAME:AddMessage('|cff69ccf0[TWA]|cff0070de:' .. time() .. '|cffffffff[' .. a .. ']')
+    DEFAULT_CHAT_FRAME:AddMessage('|cff69ccf0[NF]|cff0070de:' .. time() .. '|cffffffff[' .. a .. ']')
 end
 
 function nf_Debug(a)
@@ -31,22 +34,27 @@ function nf_Initialize()
     local race = UnitRace('player');
     if class == "Priest" and race == "Dwarf" then
         nf_Print('you are a dorf preest')
+        DPxFrame:Show()
+        MTxFrame:Hide()
     else
         nf_Print('you are NOT a dorf preest')
+        DPxFrame:Hide()
+        MTxFrame:Show()
     end
 
     nf_Initialized = true;
 end
 
+--[ OnLoad ]--
 function nf_OnLoad()
     nf_RegisterEvents()
     nf_UnpauseEvents()
 end
 
+--[ OnUpdate ]--
+function nf_OnUpdate(arg1)
 
-
-
-
+end
 
 --[ OnEvent ]--
 function nf_OnEvent(event, arg1)
@@ -54,7 +62,13 @@ function nf_OnEvent(event, arg1)
     if false then
         --
     elseif event == "PARTY_MEMBERS_CHANGED" then
-        vr.api.GroupSync();
+        --vr.api.GroupSync();
+
+    elseif event == "CHAT_MSG_ADDON" and arg1 == "MTx" then
+        NF.handleMTxSync(arg1, arg2, arg3, arg4)
+
+    elseif event == "CHAT_MSG_ADDON" and arg1 == "DPx" then
+        NF.handleDPxSync(arg1, arg2, arg3, arg4)
 
     elseif event == "PLAYER_AURAS_CHANGED" then
         -- Check to see if mounted
@@ -77,5 +91,22 @@ function nf_OnEvent(event, arg1)
             nf_Initialize(false);
         end
     end
+
+end
+
+
+
+
+---[ DPx functions ]-----------------------------------------------------------
+function nf_DPxPing()
+    DPx_Countdown = DPx_Countdown + 1
+    ChatThrottleLib:SendAddonMessage("ALERT", "NF", DPx_Countdown, "RAID") -- transmit roster
+end
+
+
+
+
+---[ MTx functions ]-----------------------------------------------------------
+function nf_MTxPing()
 
 end
