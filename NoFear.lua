@@ -11,6 +11,10 @@ nf.AmMTx = false;
 
 nf.MTxState = false;
 
+nf._lastFearWardCastOnMe = GetTime();
+
+nf._lastFearWardCastOnMe = nf._lastFearWardCastOnMe - nf._lastFearWardCastOnMe
+
 local asscount = 0;
 
 function nf.Print(a)
@@ -50,7 +54,7 @@ function nf.Initialize()
         MTxFrame:Show()
         nf.CreateMTxButton()
     end
-
+    nf.VerifyFW()
     nf.Initialized = true;
 end
 
@@ -62,6 +66,23 @@ end
 
 --[ OnUpdate ]--
 function nf.OnUpdate(arg1)
+    nf.CountdownSetText()
+end
+
+function nf.CountdownSetText()
+    --nf._lastFearWardCastOnMe = GetTime();
+    --nf.SecondsSince(timestamp)
+
+    if nf.AmDPx then
+        return
+    end
+
+    local CD = 30 - nf.SecondsSince(nf._lastFearWardCastOnMe)
+    if CD > 0 then
+        MTxButton:SetText(CD)
+    else
+        MTxButton:SetText("ready")
+    end
 
 end
 
@@ -80,10 +101,11 @@ function nf.OnEvent(event, arg1, arg2)
         nf.handleMTxSync(arg1, arg2, arg3, arg4)
 
     elseif event == "CHAT_MSG_ADDON" and arg1 == "NF_DPx" then
-        nf.Print('i see some fucking thing')
+        --nf.Print('i see some fucking thing')
         nf.handleDPxSync(arg1, arg2, arg3, arg4)
 
     elseif event == "PLAYER_AURAS_CHANGED" then
+        nf.VerifyFW()
         ---- Check to see if mounted
         --if UnitIsMounted("player") then
         --    VRotaMount = true
@@ -123,6 +145,17 @@ function nf.ToggleUI()
     end
 end
 
+function nf.VerifyFW()
+    if nf.AmDPx then
+       return
+    end
+    if isFearWard() then
+        nf.SetMTxButtonHaveFW()
+    else
+        nf.SetMTxButtonNoFW()
+    end
+end
+
 
 ---[ nf_DPxPing ]-----------------------------------------------------------
 function nf.DPxPing()
@@ -131,8 +164,8 @@ function nf.DPxPing()
 end
 
 function nf.handleDPxSync(arg1, arg2, arg3, arg4)
-
-    nf.Print(arg1 .. ":" .. arg2)
+    nf._lastFearWardCastOnMe = GetTime();
+    --nf.Print(arg1 .. ":" .. arg2)
 end
 
 
@@ -144,8 +177,8 @@ end
 function nf.CreateMTxButton()
     MTxButton = CreateFrame("Button", nil, ass)
     MTxButton:SetPoint("CENTER", ass, "CENTER", 0, 0)
-    MTxButton:SetWidth(75)
-    MTxButton:SetHeight(75)
+    MTxButton:SetWidth(50)
+    MTxButton:SetHeight(50)
 
     MTxButton:SetMovable(true)
     MTxButton:EnableMouse(true)
@@ -162,15 +195,16 @@ function nf.CreateMTxButton()
     ntex:SetAllPoints()
     MTxButton:SetNormalTexture(ntex)
 
-    MTxButton:SetText("test")
+    --MTxButton:SetText("test")
 
     local fo = button:CreateFontString()
-    fo:SetFont("Fonts/ARIALN.TTF",48)
+    fo:SetFont("Fonts/ARIALN.TTF", 48)
+    fo:SetShadowOffset(1, -1)
     fo:SetPoint("CENTER", MTxButton, "CENTER", 0, 0)
-    fo:SetText("test")
+    --fo:SetText("test")
     MTxButton:SetFontString(fo)
 
-
+    --MTxButton:SetNormalFontObject("GameFontNormal")
 
     --local htex = MTxButton:CreateTexture()
     ----htex:SetTexture("Interface/Buttons/UI-Panel-Button-Highlight")
@@ -188,37 +222,117 @@ function nf.CreateMTxButton()
 
 end
 
-function nf.SetMTxButtonText()
-    local fo = button:CreateFontString()
-    fo:SetFont("Fonts/ARIALN.TTF",24)
-    fo:SetPoint("CENTER", MTxButton, "CENTER", 0, 0)
-    fo:SetText("test")
-    MTxButton:SetFontString(fo)
-end
+--function nf.SetMTxButtonText()
+--    local fo = button:CreateFontString()
+--    fo:SetFont("Fonts/ARIALN.TTF",24)
+--    fo:SetPoint("CENTER", MTxButton, "CENTER", 0, 0)
+--    fo:SetText("test")
+--    MTxButton:SetFontString(fo)
+--end
 
-function nf.SetMTxButtonNormal()
+function nf.SetMTxButtonHaveFW()
     local ntex = MTxButton:CreateTexture()
     ntex:SetTexture("Interface/Icons/Spell_Holy_Excorcism")
     ntex:SetAllPoints()
     MTxButton:SetNormalTexture(ntex)
-    MTxButton:SetText('A')
+    --MTxButton:SetText('A')
 end
 
-function nf.SetMTxButtonRed()
+function nf.SetMTxButtonNoFW()
     local ntex = MTxButton:CreateTexture()
     ntex:SetTexture("Interface/Icons/Spell_Holy_Excorcism")
     ntex:SetAllPoints()
+    ntex:SetDesaturated(true)
     MTxButton:SetNormalTexture(ntex)
-    MTxButton:SetText('B')
+    --MTxButton:SetText('B')
 end
 
 function nf.ToggleMTxButton()
     if nf.MTxState then
-        nf.SetMTxButtonNormal()
+        nf.SetMTxButtonHaveFW()
         nf.MTxState = not nf.MTxState
     else
-        nf.SetMTxButtonRed()
+        nf.SetMTxButtonNoFW()
         nf.MTxState = not nf.MTxState
     end
-
 end
+
+
+
+
+--region    ----    TIME
+
+-- time() returns 
+-- GetTime() returns epoch time s.mmm
+
+--- [ nf.TimeHours ] -----------------------------------------------------
+-- Function that echoes time in hours
+function nf.TimeHours()
+    local hours, minutes = GetGameTime();
+    return hours;
+end
+
+--- [ nf.TimeMinutes ] -----------------------------------------------------
+-- Function that echoes time in minutes
+function nf.TimeMinutes()
+    local epoch = time();
+    local hours = math.floor(epoch / 3600)
+    local minutes = math.floor((epoch - (hours * 3600)) / 60)
+    return minutes
+end
+
+--- [ nf.TimeSeconds ] -----------------------------------------------------
+-- Function that echoes time in seconds
+function nf.TimeSeconds()
+    local epoch = time();
+    local minutes = math.floor(epoch / 60)
+    local seconds = epoch - (minutes * 60)
+    return seconds
+end
+
+---[ nf.MilliSecondsSince ]----------------------------------------------------
+-- Returns # of milliseconds since <timestamp>
+function nf.MilliSecondsSince(timestamp)
+    local d1 = nf.GetTime();
+    local d2 = timestamp;
+
+    return (-1 * (d2 - d1));
+end
+
+---[ nf.SecondsSince ]---------------------------------------------------------
+-- Returns # of seconds since <timestamp>
+function nf.SecondsSince(timestamp)
+
+    i, f = nf.Modf(GetTime());
+    j, k = nf.Modf(timestamp)
+
+    local d1 = i; -- convert to seconds
+    local d2 = j;
+
+    return (-1 * (d2 - d1));
+end
+
+---[ nf.SecondsUntil ]---------------------------------------------------------
+-- Returns # of seconds until <timestamp>
+function nf.SecondsUntil(timestamp, delay)
+    local d1 = nf.GetTime();
+    local d2 = timestamp;
+
+    return delay - (-1 * (d2 - d1));
+end
+
+---[ nf.GetTime ]--------------------------------------------------------------
+-- Returns the number of seconds since system up
+function nf.GetTime()
+    return GetTime();
+end
+
+---[ nf.Modf ]------------------------------------------------------------------
+-- Returns the integral and fractional part of its argument
+function nf.Modf(number)
+    local integralPart = math.floor(number)
+    local fractionalPart = number - integralPart
+    return integralPart, fractionalPart
+end
+
+--endregion ----   TIME
