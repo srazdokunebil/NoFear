@@ -179,7 +179,7 @@
                 </Anchors>
                 <Scripts>
                     <OnClick>
-                        nf.MTxPing();
+                        nf.ToggleMTxButton();
                     </OnClick>
                 </Scripts>
             </Button>
@@ -205,15 +205,6 @@
 
         </Frames>
     </Frame>
-
-
-
-
-
-
-
-
-
 
 
     <Button name="NF_Minimap" movable="true" parent="UIParent" enableMouse="true" toplevel="true"

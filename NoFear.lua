@@ -9,6 +9,10 @@ nf.DPx_Countdown = 0;
 nf.AmDPx = false;
 nf.AmMTx = false;
 
+nf.MTxState = false;
+
+local asscount = 0;
+
 function nf.Print(a)
     if a == nil then
         DEFAULT_CHAT_FRAME:AddMessage('|cff69ccf0[NF]|cff0070de:' .. time() .. '|cffffffff attempt to print a nil value.')
@@ -44,6 +48,7 @@ function nf.Initialize()
         nf.AmDPx = false;
         DPxFrame:Hide()
         MTxFrame:Show()
+        nf.CreateMTxButton()
     end
 
     nf.Initialized = true;
@@ -110,10 +115,10 @@ function nf.ToggleUI()
             DPxFrame:Show();
         end
     else
-        if MTxFrame:IsShown() then
-            MTxFrame:Hide();
+        if MTxButton:IsShown() then
+            MTxButton:Hide();
         else
-            MTxFrame:Show();
+            MTxButton:Show();
         end
     end
 end
@@ -133,5 +138,87 @@ end
 
 ---[ nf_MTxPing ]-----------------------------------------------------------
 function nf.MTxPing()
+
+end
+
+function nf.CreateMTxButton()
+    MTxButton = CreateFrame("Button", nil, ass)
+    MTxButton:SetPoint("CENTER", ass, "CENTER", 0, 0)
+    MTxButton:SetWidth(75)
+    MTxButton:SetHeight(75)
+
+    MTxButton:SetMovable(true)
+    MTxButton:EnableMouse(true)
+    MTxButton:SetScript("OnMouseDown",function() MTxButton:StartMoving() end)
+    MTxButton:SetScript("OnMouseUp",function() MTxButton:StopMovingOrSizing() end)
+
+    --MTxButton:SetNormalFontObject("GameFontNormal")
+
+    local ntex = MTxButton:CreateTexture()
+    --ntex:SetTexture("Interface/Buttons/UI-Panel-Button-Up")
+    --Interface\Icons\Spell_Holy_Excorcism
+    ntex:SetTexture("Interface/Icons/Spell_Holy_Excorcism")
+    --ntex:SetTexCoord(0, 0.625, 0, 0.6875)
+    ntex:SetAllPoints()
+    MTxButton:SetNormalTexture(ntex)
+
+    MTxButton:SetText("test")
+
+    local fo = button:CreateFontString()
+    fo:SetFont("Fonts/ARIALN.TTF",48)
+    fo:SetPoint("CENTER", MTxButton, "CENTER", 0, 0)
+    fo:SetText("test")
+    MTxButton:SetFontString(fo)
+
+
+
+    --local htex = MTxButton:CreateTexture()
+    ----htex:SetTexture("Interface/Buttons/UI-Panel-Button-Highlight")
+    --htex:SetTexture("Interface/Icons/Spell_Holy_Excorcism")
+    --htex:SetTexCoord(0, 0.625, 0, 0.6875)
+    --htex:SetAllPoints()
+    --MTxButton:SetHighlightTexture(htex)
+    --
+    --local ptex = MTxButton:CreateTexture()
+    ----ptex:SetTexture("Interface/Buttons/UI-Panel-Button-Down")
+    --ptex:SetTexture("Interface/Buttons/UI-Panel-Button-Down")
+    --ptex:SetTexCoord(0, 0.625, 0, 0.6875)
+    --ptex:SetAllPoints()
+    --MTxButton:SetPushedTexture(ptex)
+
+end
+
+function nf.SetMTxButtonText()
+    local fo = button:CreateFontString()
+    fo:SetFont("Fonts/ARIALN.TTF",24)
+    fo:SetPoint("CENTER", MTxButton, "CENTER", 0, 0)
+    fo:SetText("test")
+    MTxButton:SetFontString(fo)
+end
+
+function nf.SetMTxButtonNormal()
+    local ntex = MTxButton:CreateTexture()
+    ntex:SetTexture("Interface/Icons/Spell_Holy_Excorcism")
+    ntex:SetAllPoints()
+    MTxButton:SetNormalTexture(ntex)
+    MTxButton:SetText('A')
+end
+
+function nf.SetMTxButtonRed()
+    local ntex = MTxButton:CreateTexture()
+    ntex:SetTexture("Interface/Icons/Spell_Holy_Excorcism")
+    ntex:SetAllPoints()
+    MTxButton:SetNormalTexture(ntex)
+    MTxButton:SetText('B')
+end
+
+function nf.ToggleMTxButton()
+    if nf.MTxState then
+        nf.SetMTxButtonNormal()
+        nf.MTxState = not nf.MTxState
+    else
+        nf.SetMTxButtonRed()
+        nf.MTxState = not nf.MTxState
+    end
 
 end
